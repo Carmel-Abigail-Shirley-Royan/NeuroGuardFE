@@ -91,15 +91,12 @@
                         .then(response => response.json())
                         .then(data => {
                             console.log("✅ Emergency alert sent:", data);
+                            alert("Live location sent to emergency team.");
 
-                            const mapsLink = data.maps_link;
-                            alert("Live location sent!\nView on Maps: " + mapsLink);
-
-                            // Optional: redirect to maps
-                            // window.open(mapsLink, '_blank');
-
+                            // Dial emergency number (optional)
                             window.location.href = "tel:6374134569";
                         })
+
 
                         .catch(error => {
                             console.error("❌ Failed to send alert:", error);
