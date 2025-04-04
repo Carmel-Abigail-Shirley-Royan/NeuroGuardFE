@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,8 @@
         }
 
         .header {
-            background-color: #3F51B5; /* Matching login page */
+            background-color: #3F51B5;
+            /* Matching login page */
             color: white;
             text-align: center;
             padding: 30px 20px;
@@ -59,6 +61,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="register-container">
@@ -66,7 +69,7 @@
             <h2>Neuro-Guard</h2>
             <p>Advanced Seizure Detection & Monitoring</p>
         </div>
-        
+
         <div class="form-container">
             <h4 class="text-center mb-3">Create an Account</h4>
             <form id="registerForm">
@@ -78,6 +81,11 @@
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" required>
                 </div>
+                <div class="mb-3">
+                    <label for="doctorEmail" class="form-label">Doctor's Email</label>
+                    <input type="email" class="form-control" id="doctorEmail" required>
+                </div>
+
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" required>
@@ -95,21 +103,24 @@
     <script>
         document.getElementById("registerForm").addEventListener("submit", function (event) {
             event.preventDefault();
-            
+
             const name = document.getElementById("name").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirmPassword").value;
+            const doctorEmail = document.getElementById("doctorEmail").value;
+
 
             if (password !== confirmPassword) {
                 alert("Passwords do not match!");
                 return;
             }
 
-            localStorage.setItem("user", JSON.stringify({ name, email, password }));
+            localStorage.setItem("user", JSON.stringify({ name, email, password, doctorEmail }));
             alert("Registration successful! Please log in.");
             window.location.href = "index.html"; // Redirect to login page
         });
     </script>
 </body>
+
 </html>
