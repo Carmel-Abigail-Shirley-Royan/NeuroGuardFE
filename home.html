@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
         }
+
         .container {
             text-align: center;
             background: white;
@@ -24,6 +26,7 @@
             width: 90%;
             max-width: 500px;
         }
+
         .header {
             background: linear-gradient(135deg, #5f7fe8, #3a5fc9);
             color: white;
@@ -32,12 +35,15 @@
             font-weight: bold;
             font-size: 1.5rem;
         }
+
         .logo {
             width: 60%;
             max-width: 200px;
             margin: 20px 0;
         }
-        .btn-primary, .btn-result {
+
+        .btn-primary,
+        .btn-result {
             width: 100%;
             padding: 12px;
             font-size: 1.1rem;
@@ -48,23 +54,29 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
         .btn-primary {
             background: #5f7fe8;
         }
+
         .btn-primary:hover {
             background: #3a5fc9;
         }
+
         .btn-result {
             background: #28a745;
             color: white;
             display: none;
         }
+
         .btn-result:hover {
             background: #218838;
         }
+
         input[type="file"] {
             display: none;
         }
+
         #resultText {
             display: none;
             margin-top: 10px;
@@ -72,6 +84,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">NEURO-GUARD</div>
@@ -87,23 +100,27 @@
     </div>
 
     <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "index.html"; // Redirect to login if not logged in
+        }
+
         let fileInput = document.getElementById("fileInput");
         let uploadBtn = document.getElementById("uploadBtn");
         let resultBtn = document.getElementById("resultBtn");
         let resultText = document.getElementById("resultText");
 
-        uploadBtn.addEventListener("click", function() {
+        uploadBtn.addEventListener("click", function () {
             fileInput.click();
         });
 
-        fileInput.addEventListener("change", function() {
+        fileInput.addEventListener("change", function () {
             if (fileInput.files.length > 0) {
                 resultBtn.style.display = "block";
                 resultText.style.display = "block";
             }
         });
 
-        resultBtn.addEventListener("click", function() {
+        resultBtn.addEventListener("click", function () {
             let file = fileInput.files[0];
 
             if (!file) {
@@ -118,28 +135,29 @@
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("🔵 Server Response:", data);
+                .then(response => response.json())
+                .then(data => {
+                    console.log("🔵 Server Response:", data);
 
-                if (data.predictions && data.predictions.length > 0) {
-                    let prediction = data.predictions[0];
-                    localStorage.setItem("seizurePrediction", prediction);
+                    if (data.predictions && data.predictions.length > 0) {
+                        let prediction = data.predictions[0];
+                        localStorage.setItem("seizurePrediction", prediction);
 
-                    if (prediction === "Seizure Detected") {
-                        window.location.href = "pop.html";
+                        if (prediction === "Seizure Detected") {
+                            window.location.href = "pop.html";
+                        } else {
+                            window.location.href = "pop2.html";
+                        }
                     } else {
-                        window.location.href = "pop2.html";
+                        alert("⚠️ Error: No prediction received from server.");
                     }
-                } else {
-                    alert("⚠️ Error: No prediction received from server.");
-                }
-            })
-            .catch(error => {
-                console.error("❌ Error:", error);
-                alert("Failed to process file.");
-            });
+                })
+                .catch(error => {
+                    console.error("❌ Error:", error);
+                    alert("Failed to process file.");
+                });
         });
     </script>
 </body>
+
 </html>
