@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+        }
+        .alert-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 6px 15px rgba(255, 0, 0, 0.5);
+            max-width: 350px;
+        }
+        .alert-box h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: red;
+        }
+        .alert-box p {
+            font-size: 1rem;
+            color: black;
+        }
+        .btn-ok {
+            background: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert-box" id="seizureAlert">
+        <h2 id="alertTitle"></h2>
+        <p id="alertMessage"></p>
+        <a id="actionLink"><button class="btn-ok">OK</button></a>
+    </div>
+
+    <script>
+        // Retrieve AI model prediction from local storage
+        let prediction = localStorage.getItem("seizurePrediction");
+
+        if (prediction === "Seizure Detected") {
+            document.getElementById("alertTitle").textContent = "🚨 Emergency Alert 🚨";
+            document.getElementById("alertMessage").textContent = "Seizure detected, kindly take action!";
+            document.getElementById("actionLink").setAttribute("href", "first_aid.html");
+        } else {
+            window.location.href = "pop2.html"; // Redirect to No Seizure page
+        }
+    </script>
+</body>
+</html>

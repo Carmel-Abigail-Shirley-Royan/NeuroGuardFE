@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro-Guard Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #eef2f7;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+        .header {
+            background: linear-gradient(135deg, #5f7fe8, #3a5fc9);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .logo {
+            width: 60%;
+            max-width: 200px;
+            margin: 20px 0;
+        }
+        .btn-primary, .btn-result {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            transition: 0.3s;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-primary {
+            background: #5f7fe8;
+        }
+        .btn-primary:hover {
+            background: #3a5fc9;
+        }
+        .btn-result {
+            background: #28a745;
+            color: white;
+            display: none;
+        }
+        .btn-result:hover {
+            background: #218838;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        #resultText {
+            display: none;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">NEURO-GUARD</div>
+        <img src="img/logo.jpg" alt="Neuro-Guard Logo" class="logo">
+        <p>⚡🧠 Seizure or Safe? Let's Find Out!</p>
+        <p>Upload your EMG signal (CSV) & let AI detect if a seizure is present! 🚀🔍</p>
+
+        <input type="file" id="fileInput" accept=".csv">
+        <button class="btn btn-primary" id="uploadBtn">Choose CSV File</button>
+
+        <p id="resultText">Tap to Reveal: Seizure or Safe? <br> Click on the Result & let AI uncover the truth!</p>
+        <button class="btn btn-result" id="resultBtn">Show Result</button>
+    </div>
+
+    <script>
+        let fileInput = document.getElementById("fileInput");
+        let uploadBtn = document.getElementById("uploadBtn");
+        let resultBtn = document.getElementById("resultBtn");
+        let resultText = document.getElementById("resultText");
+
+        uploadBtn.addEventListener("click", function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener("change", function() {
+            if (fileInput.files.length > 0) {
+                resultBtn.style.display = "block";
+                resultText.style.display = "block";
+            }
+        });
+
+        resultBtn.addEventListener("click", function() {
+            let file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("https://neuroguard.onrender.com/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("🔵 Server Response:", data);
+
+                if (data.predictions && data.predictions.length > 0) {
+                    let prediction = data.predictions[0];
+                    localStorage.setItem("seizurePrediction", prediction);
+
+                    if (prediction === "Seizure Detected") {
+                        window.location.href = "pop.html";
+                    } else {
+                        window.location.href = "pop2.html";
+                    }
+                } else {
+                    alert("⚠️ Error: No prediction received from server.");
+                }
+            })
+            .catch(error => {
+                console.error("❌ Error:", error);
+                alert("Failed to process file.");
+            });
+        });
+    </script>
+</body>
+</html>
