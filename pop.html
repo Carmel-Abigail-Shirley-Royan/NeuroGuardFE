@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             height: 100vh;
             background-color: #222;
         }
+
         .alert-box {
             background: white;
             padding: 20px;
@@ -21,15 +23,18 @@
             box-shadow: 0px 6px 15px rgba(255, 0, 0, 0.5);
             max-width: 350px;
         }
+
         .alert-box h2 {
             font-size: 1.5rem;
             font-weight: bold;
             color: red;
         }
+
         .alert-box p {
             font-size: 1rem;
             color: black;
         }
+
         .btn-ok {
             background: blue;
             color: white;
@@ -39,30 +44,68 @@
             cursor: pointer;
             width: 100%;
         }
+
         a {
             text-decoration: none;
             color: white;
         }
     </style>
 </head>
+
 <body>
     <div class="alert-box" id="seizureAlert">
         <h2 id="alertTitle"></h2>
         <p id="alertMessage"></p>
-        <a id="actionLink"><button class="btn-ok">OK</button></a>
+        <!-- <a id="actionLink"><button class="btn-ok">OK</button></a> -->
+        <a id="actionLink"><button class="btn-ok" onclick="handleEmergency()">OK</button></a>
+
     </div>
 
     <script>
-        // Retrieve AI model prediction from local storage
         let prediction = localStorage.getItem("seizurePrediction");
 
         if (prediction === "Seizure Detected") {
             document.getElementById("alertTitle").textContent = "🚨 Emergency Alert 🚨";
             document.getElementById("alertMessage").textContent = "Seizure detected, kindly take action!";
-            document.getElementById("actionLink").setAttribute("href", "first_aid.html");
         } else {
-            window.location.href = "pop2.html"; // Redirect to No Seizure page
+            window.location.href = "pop2.html";
+        }
+
+        function handleEmergency() {
+            // 1. Get location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+
+                    // 2. Send location to Flask backend
+                    fetch("https://neuroguard.onrender.com/emergency", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            user: "Patient X", // Optional: personalize
+                            lat: lat,
+                            lon: lon
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("✅ Emergency alert sent:", data);
+
+                            // 3. Call ambulance (only works on mobile)
+                            window.location.href = "tel:108"; // or your local emergency number
+                        })
+                        .catch(error => {
+                            console.error("❌ Failed to send alert:", error);
+                            alert("Unable to send emergency alert. Please call emergency manually.");
+                        });
+                });
+            } else {
+                alert("Geolocation not supported by this browser.");
+            }
         }
     </script>
+
 </body>
+
 </html>
