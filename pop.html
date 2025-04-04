@@ -92,9 +92,15 @@
                         .then(data => {
                             console.log("✅ Emergency alert sent:", data);
 
-                            // 3. Call ambulance (only works on mobile)
-                            window.location.href = "tel:108"; // or your local emergency number
+                            const mapsLink = data.maps_link;
+                            alert("Live location sent!\nView on Maps: " + mapsLink);
+
+                            // Optional: redirect to maps
+                            // window.open(mapsLink, '_blank');
+
+                            window.location.href = "tel:6374134569";
                         })
+
                         .catch(error => {
                             console.error("❌ Failed to send alert:", error);
                             alert("Unable to send emergency alert. Please call emergency manually.");
