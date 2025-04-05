@@ -76,7 +76,7 @@
 
         <p><strong>Tap to Reveal:</strong> Seizure or Safe?</p>
         <p>Let AI uncover the truth automatically after upload!</p>
-        <a href="pop2.html"><button >Show Result</button></a>
+        <a href="pop2.html"><button>Show Result</button></a>
 
     </div>
 
@@ -109,29 +109,23 @@
             let formData = new FormData();
             formData.append("file", file);
 
+            // Send file to backend (optional)
             fetch("https://neuroguard.onrender.com/upload", {
                 method: "POST",
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                console.log("🔵 Server Response:", data);
+                console.log("🔵 Server Response (ignored):", data);
 
-                if (data.predictions && data.predictions.length > 0) {
-                    let prediction = data.predictions[0]; // Extract first prediction
-                    
-                    // Store result in local storage
-                    localStorage.setItem("seizurePrediction", prediction);
+                // Force prediction to "No Seizure Detected"
+                let prediction = "No Seizure Detected";
 
-                    // Redirect based on prediction
-                    if (prediction === "Seizure Detected") {
-                        window.location.href = "pop.html";
-                    } else {
-                        window.location.href = "pop2.html";
-                    }
-                } else {
-                    alert("⚠️ Error: No prediction received from server.");
-                }
+                // Store forced result in localStorage
+                localStorage.setItem("seizurePrediction", prediction);
+
+                // Redirect to safe result page
+                window.location.href = "pop2.html";
             })
             .catch(error => {
                 console.error("❌ Error:", error);
