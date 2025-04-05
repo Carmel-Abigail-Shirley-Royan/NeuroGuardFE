@@ -71,39 +71,50 @@
 
     function handleEmergency() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          let lat = position.coords.latitude;
-          let lon = position.coords.longitude;
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
 
-          let userInfo = JSON.parse(localStorage.getItem("user"));
-          let user = userInfo?.name || "Patient X";
-          let doctorEmail = userInfo?.doctorEmail || "doctor@example.com";
-          let userEmail = userInfo?.email || "user@example.com";
-          let userPassword = "mdus fkkx rhti guko";
+            let userInfo = JSON.parse(localStorage.getItem("user"));
+            let user = userInfo?.name || "Patient X";
+            let doctorEmail = userInfo?.doctorEmail || "doctor@example.com";
+            let userEmail = userInfo?.email || "user@example.com";
+            let userPassword = "mdus fkkx rhti guko"; // Your Gmail app password
 
-          fetch("https://neuroguard.onrender.com/emergency", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              user: user,
-              lat: lat,
-              lon: lon,
-              doctor_email: doctorEmail,
-              sender_email: userEmail,
-              sender_password: userPassword
+            fetch("https://neuroguard.onrender.com/emergency", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                user: user,
+                lat: lat,
+                lon: lon,
+                doctor_email: doctorEmail,
+                sender_email: userEmail,
+                sender_password: userPassword
+              })
             })
-          })
-            .then(response => response.json())
-            .then(data => {
-              console.log("✅ Emergency alert sent:", data);
-              alert("Live location sent to doctor.");
-              window.location.href = "tel:6374134569";
-            })
-            .catch(error => {
-              console.error("❌ Failed to send alert:", error);
-              alert("Unable to send emergency alert. Please call emergency manually.");
-            });
-        });
+              .then(response => response.json())
+              .then(data => {
+                console.log("✅ Emergency alert sent:", data);
+                alert("Live location sent to doctor.");
+                window.location.href = "tel:6374134569";
+              })
+              .catch(error => {
+                console.error("❌ Failed to send alert:", error);
+                alert("Unable to send emergency alert. Please call emergency manually.");
+              });
+          },
+          function (error) {
+            console.error("❌ Geolocation error:", error);
+            alert("Location access denied or unavailable.");
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
       } else {
         alert("Geolocation not supported by this browser.");
       }
