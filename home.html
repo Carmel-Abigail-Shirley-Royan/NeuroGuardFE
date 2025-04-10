@@ -100,7 +100,7 @@
     </div>
 
     <script>
-        
+
         let fileInput = document.getElementById("fileInput");
         let uploadBtn = document.getElementById("uploadBtn");
         let resultBtn = document.getElementById("resultBtn");
@@ -132,24 +132,32 @@
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json())
-.then(data => {
-    console.log("🔵 Server Response:", data); // SEE what's coming back!
+                .then(response => response.json())
+                .then(data => {
+                    console.log("🔵 Server Response:", data);
 
-    if (data && data.predictions && data.predictions.length > 0) {
-        let prediction = data.predictions[0];
-        localStorage.setItem("seizurePrediction", prediction);
+                    if (data.error) {
+                        alert("❌ Server Error: " + data.error);
+                        return;
+                    }
 
-        if (prediction === "Seizure Detected") {
-            window.location.href = "pop.html";
-        } else {
-            window.location.href = "pop2.html";
-        }
-    } else {
-        alert("⚠️ Error: No prediction received from server.");
-        console.log("⚠️ Server response issue:", JSON.stringify(data));
-    }
-})
+                    if (data.predictions && data.predictions.length > 0) {
+                        let prediction = data.predictions[0];
+                        localStorage.setItem("seizurePrediction", prediction);
+
+                        if (prediction === "Seizure Detected") {
+                            window.location.href = "pop.html";
+                        } else {
+                            window.location.href = "pop2.html";
+                        }
+                    } else {
+                        alert("⚠️ No prediction received from server.");
+                    }
+                })
+                .catch(error => {
+                    console.error("❌ Error:", error);
+                    alert("Failed to process file.");
+                });
 
         });
     </script>

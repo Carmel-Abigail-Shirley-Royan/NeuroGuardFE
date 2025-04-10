@@ -84,20 +84,28 @@
                         let userEmail = userInfo?.email || "user@example.com";
                         let userPassword = "mdus fkkx rhti guko"; // Your Gmail app password
 
-                        fetch("https://neuroguard.onrender.com/upload", {
+                        fetch("https://neuroguard.onrender.com/emergency", {
                             method: "POST",
-                            body: formData,
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                user: user,
+                                lat: lat,
+                                lon: lon,
+                                doctor_email: doctorEmail,
+                                sender_email: userEmail,
+                                sender_password: userPassword
+                            })
                         })
                             .then(response => response.json())
                             .then(data => {
-                                console.log("✅ Prediction received:", data);
-                                const prediction = data.predictions[0]; // get the first prediction
-                                localStorage.setItem("seizurePrediction", prediction);
-                                window.location.href = "pop1.html"; // redirect to result screen
+                                console.log("✅ Emergency response:", data);
+                                alert("🚨 Emergency alert sent successfully!");
                             })
                             .catch(error => {
-                                console.error("❌ Upload failed:", error);
-                                alert("Prediction failed. Please try again.");
+                                console.error("❌ Emergency alert failed:", error);
+                                alert("Failed to send emergency alert.");
                             });
 
                     },

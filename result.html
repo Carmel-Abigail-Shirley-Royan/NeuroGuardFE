@@ -115,17 +115,18 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("🔵 Server Response (ignored):", data);
+    console.log("🔵 Server Response (ignored):", data);
 
-                // Force prediction to "No Seizure Detected"
-                let prediction = "No Seizure Detected";
+    // Force prediction to "No Seizure Detected"
+    let prediction = "No Seizure Detected";
 
-                // Store forced result in localStorage
-                localStorage.setItem("seizurePrediction", prediction);
+    // Store forced result in localStorage
+    localStorage.setItem("seizurePrediction", prediction);
 
-                // Redirect to safe result page
-                window.location.href = "pop2.html";
-            })
+    // Redirect to safe result page
+    window.location.href = "pop2.html";
+})
+
             .catch(error => {
                 console.error("❌ Error:", error);
                 alert("Failed to process file.");
