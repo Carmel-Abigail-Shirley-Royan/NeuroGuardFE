@@ -56,9 +56,7 @@
     <div class="alert-box" id="seizureAlert">
         <h2 id="alertTitle"></h2>
         <p id="alertMessage"></p>
-        <a id="actionLink"><button class="btn-ok" onclick="handleEmergency()">OK</button></a>
-        <!-- <a href="pop2.html"><button>OK</button></a> -->
-
+        <button class="btn-ok" onclick="handleEmergency()">OK</button>
     </div>
 
     <script>
@@ -82,8 +80,9 @@
                         let user = userInfo?.name || "Patient X";
                         let doctorEmail = userInfo?.doctorEmail || "doctor@example.com";
                         let userEmail = userInfo?.email || "user@example.com";
-                        let userPassword = "mdus fkkx rhti guko"; // Your Gmail app password
+                        let userPassword = "mdus fkkx rhti guko"; // App password
 
+                        // 🚨 Send emergency email
                         fetch("https://neuroguard.onrender.com/emergency", {
                             method: "POST",
                             headers: {
@@ -98,15 +97,23 @@
                                 sender_password: userPassword
                             })
                         })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log("✅ Emergency response:", data);
-                                alert("🚨 Emergency alert sent successfully!");
-                            })
-                            .catch(error => {
-                                console.error("❌ Emergency alert failed:", error);
-                                alert("Failed to send emergency alert.");
-                            });
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("✅ Emergency response:", data);
+                            alert("🚨 Emergency alert sent!");
+
+                            // 📞 Trigger emergency call
+                            window.location.href = "tel:112"; // Replace 112 with actual emergency number
+
+                            // 🏥 Redirect to first aid page
+                            setTimeout(() => {
+                                window.location.href = "firstaid.html";
+                            }, 1000); // Delay to ensure call link triggers first
+                        })
+                        .catch(error => {
+                            console.error("❌ Emergency alert failed:", error);
+                            alert("Failed to send emergency alert.");
+                        });
 
                     },
                     function (error) {
@@ -124,7 +131,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>
